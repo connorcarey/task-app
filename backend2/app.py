@@ -36,7 +36,7 @@ def index():
 
 
 # other people's tasks will be sent back to the front end. The if the front end posts, we recieve the data and update firebase.
-@app.route('/api/othersTasks/<userID>', methods=['GET', 'POST'])
+@app.route('/api/othersTasks', methods=['GET', 'POST'])
 def othersTasks(userID):
     # if we get a get method
     if request.method == 'GET':
