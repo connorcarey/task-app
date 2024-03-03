@@ -23,7 +23,7 @@ def index():
     # tasks = [doc.to_dict() for doc in tasks_docs]
     # tasks = tasks[0]["deadlineTime"]
     # return tasks
-    return getTaskDetails("Ud8a2ZqK6Ucn9BDm2xuj", "yP2sOyfpsXJvcu9lG4zj")
+    return getTasks("", "Ud8a2ZqK6Ucn9BDm2xuj")
     
 
 @app.route('/verify')
@@ -68,13 +68,16 @@ def remindEmail(taskID, userID, emailAccount):
         server.sendmail(computadora, reciever, message)
 
 
-def getTaskDetails(taskID, userID):
+def getTasks(taskID, userID):
     db = firestore.client()
     allUsers = db.collection("users").document(userID)
 
-    allTasks = allUsers.collection("tasks").document(taskID)
-    tasks = [doc.to_dict() for doc in allTasks]
-
+    if taskID == "":
+        allTasks = allUsers.collection("tasks").stream()
+        #tasks_docs = allTasks.get()
+        tasks = [doc.to_dict() for doc in allTasks]
+    else:
+        tasks = allUsers.collection("tasks").document(taskID).get().to_dict()
     return tasks
 
 
