@@ -48,6 +48,23 @@ def makeTask():
     recieverID = request.form.get('recieverID')
     start = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
     deadline = request.form.get('deadlineTime')
+    duration = request.form.get("duration")
+
+    personalTask = {
+        "completed" : False,
+        "confirmationURL" : "",
+        "confirmerID" : "",
+        "deadline" : deadline,
+        "duration" : duration,
+        "start": start,
+        "taskDescription": taskDescription,
+        "taskName": taskName,
+        "verified" : False,        
+    }
+
+    otherTask = {
+        ""
+    }
     
 
 
