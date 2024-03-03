@@ -14,15 +14,20 @@ firebase_admin.initialize_app(cred)
 @app.route('/')
 def index():
     db = firestore.client()
-    users_ref = db.collection("users").document("Ud8a2ZqK6Ucn9BDm2xuj")
+    all_users = db.collection("users").document("Ud8a2ZqK6Ucn9BDm2xuj")
+    
 
-    tasks_ref = users_ref.collection("tasks")
+    tasks_ref = all_users.collection("tasks")
     tasks_docs = tasks_ref.get()
 
     tasks = [doc.to_dict() for doc in tasks_docs]
     tasks = tasks[0]["deadlineTime"]
     return tasks
     
+@app.route('/dashboard', methods=['GET', 'POST'])
+    # get data from database
+    # 
+
 
 @app.route('/verify')
 def verify():
