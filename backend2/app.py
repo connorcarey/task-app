@@ -21,19 +21,16 @@ cred = credentials.ApplicationDefault()
 firebase_admin.initialize_app(cred)
 
 
-
+# dashboard like page. this is the first page that opens up and when this page is called
+# the frontend receives the task data from firebase.
 @app.route('/api')
 def index():
     session['userID'] = "SFTmzYOuA8C1CAPH5ZST"
     if session['userID']:
         return getTasks("", session['userID'])
-# if __name__ == '__main__':
-    
-#     app.run(host='10.31.176.1', port=5000, debug=True, threaded=False)
 
 
-# add task, accept invite, send proof (return media), confirm
-
+# other people's tasks will be sent back to the front end. The if the front end posts, we recieve the data and update firebase.
 @app.route('/api/othersTasks', methods=['GET', 'POST'])
 def othersTasks():
     if request.method == 'GET':
@@ -79,7 +76,7 @@ def makeTask():
         "taskName": taskName,
         "verified" : False,        
     }
-
+    
     otherTask = {
         ""
     }
