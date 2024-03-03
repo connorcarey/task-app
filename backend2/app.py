@@ -37,10 +37,12 @@ def login():
 
 @app.route('/api/makeTask', method=['POST'])
 def makeTask():
-    request_data = request.get_json()
-    if request_data:
-        if 'taskName' in request_data:
-            taskName = request_data['taskName']
+    taskName = request.form.get('taskName')
+    taskDescription = request.form.get('taskDescription')
+    recieverID = request.form.get('recieverID')
+    start = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
+    deadline = request.form.get('deadlineTime')
+    
 
 
 
