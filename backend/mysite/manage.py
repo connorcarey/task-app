@@ -21,7 +21,7 @@ def main():
 
     cred = credentials.Certificate("\task-app-b58f4-firebase-adminsdk-2pkh6-39b7c7a042.json")
     default_app = firebase_admin.initialize_app(cred, {
-        'databaseURL': DATABASE_NAME.REGION.firebasedatabase.app,
+        'databaseURL': 'task-app.nam5.firebasedatabase.app',
     })
 
 
