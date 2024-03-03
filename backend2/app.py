@@ -13,11 +13,10 @@ firebase_admin.initialize_app(cred)
 
 @app.route('/')
 def hello():    
-    ref = db.reference('/users/Ud8a2ZqK6Ucn9BDm2xuj/tasks/yP2sOyfpsXJvcu9lG4zj')
-    # db = firestore.client()
-    # users_ref = db.collection("users")
-    # docs = users_ref.get()
-    wow = ref.get()
     
-    # return [doc.to_dict() for doc in docs]
-    return wow
+    db = firestore.client()
+    users_ref = db.collection("users")
+    docs = db.collection("users").get().val()
+
+    #return [doc.to_dict() for doc in docs]
+    return docs
