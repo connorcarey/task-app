@@ -4,7 +4,7 @@ import firebase_admin
 from firebase_admin import firestore, credentials, db
 
 import smtplib, ssl
-
+from datetime import datetime
 
 # Use a service account.
 app = Flask(__name__)
@@ -86,11 +86,37 @@ def getTasks(taskID, userID):
 
 
 def getAnnoyanceLevel(taskID, userID):
-    db = firestore.client()
-    users_ref = db.collection("users").document(userID)
+    info = getTasks(taskID, userID)
+    
+    howLongItTakes = info[0]["duration"] * 60
+    startTime = info[0]["startTime"]
+    endTime = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
 
-    tasks_ref = users_ref.collection("tasks").document(taskID)
-    tasks_docs = tasks_ref.get()
+    timeLeft = diffTime(startTime, endTime)
 
-    tasks = [doc.to_dict() for doc in tasks_docs]
-    return tasks[0]["annoyanceLevel"]
+    level = min(int(timeLeft / howLongItTakes), 4)
+    return level    
+
+#Difference in two times in minutes
+def diffTime(t1, t2):
+    startingTime = datetime.strptime(t1, '%Y-%M-%D %H:%M:%S')
+    endingTime = datetime.strptime(t2, '%Y-%M-%D %H:%M:%S')
+
+    #Convert strings back to time to find the difference
+    timeLeft = endingTime - startingTime
+
+    #Don't really care about seconds tbh
+    timeLeft = round(timeLeft.total_seconds() / 60)
+    return timeLeft
+
+#Get the time remaining for a task
+def timeLeft(taskID, userID):
+    info = getTasks(taskID, userID)
+
+    #Get the current time
+    curTime = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
+    deadline = info[0]["deadlineTime"]
+
+    return diffTime(curTime, deadline)
+
+
