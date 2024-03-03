@@ -3,6 +3,7 @@ from firebase import firebase
 import firebase_admin
 from firebase_admin import firestore, credentials, db
 
+from email.mime.text import MIMEText
 import smtplib, ssl
 from datetime import datetime
 
@@ -73,12 +74,22 @@ def remindEmail(taskID, userID, emailAccount):
     
     name = specificUser[0]["name"]
     timeToComplete = timeLeft(taskID, userID)
-    nameOfTask = specificUser[0]["taskName"]
+    nameOfTask = info[0]["taskName"]
 
-    msg = "Hi " + name + ",\n\nYou have " + (int)(timeToComplete / 60) + " hour(s) left to " + nameOfTask + "!"
-    msg = msg + "\n\nFrom,\nDouble Check"
+    msg_body = "Hi " + name + ",\n\nYou have " + str(int(timeToComplete / 60)) + " hour(s) left to " + nameOfTask + "!\n\nFrom,\nDouble Check"
+    msg = MIMEText(msg_body)
+    msg['Subject'] = 'Reminder: ' + nameOfTask + ' is due soon!'
+    msg['From'] = 'john.tanaristy@gmail.com'
+    msg['To'] = emailAccount 
 
-    #Email "msg" to emailAccount
+    server = 'localhost'
+    portNum = 25
+    # password = '' 
+
+    # Send the email
+    with smtplib.SMTP(server, portNum) as server:
+        server.sendmail(msg['From'], msg['To'], msg.as_string())
+  
     
 
 def getTasks(taskID, userID):
