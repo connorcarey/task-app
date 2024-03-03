@@ -1,5 +1,4 @@
-from flask import Flask
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, session
 from firebase import firebase
 import firebase_admin
 from firebase_admin import firestore, credentials, db
@@ -23,12 +22,15 @@ def index():
 
     tasks = [doc.to_dict() for doc in tasks_docs]
     tasks = tasks[0]["deadlineTime"]
+    remindEmail("yP2sOyfpsXJvcu9lG4zj", "Ud8a2ZqK6Ucn9BDm2xuj", "email@email.com")
     return tasks
     
 @app.route('/dashboard', methods=['GET', 'POST'])
-    # get data from database
-    # 
-
+def dashboard():
+    # fetch data from database
+    if request.method == 'GET':
+        
+    
 
 @app.route('/verify')
 def verify():
@@ -44,7 +46,7 @@ def remindEmail(taskID, userID, emailAccount):
 
     name = users_ref.get().to_dict()["name"]
 
-    tasks_ref = users_ref.collection("tasks").document(taskID)
+    tasks_ref = users_ref.collection("tasks")
     tasks_docs = tasks_ref.get()
 
     tasks = [doc.to_dict() for doc in tasks_docs]
@@ -61,7 +63,7 @@ def remindEmail(taskID, userID, emailAccount):
     message = """\
     Subject: Reminder to complete your task!
 
-    {name}, you have a task to complete! You need to {title} before {deadline}. \n Good luck!""".format(name=name, title=title, deadlineTime=tasks[0]["deadlineTime"])
+    {name}, you have a task to complete! You need to {title} before {deadlineTime}. \n Good luck!""".format(name=name, title=title, deadlineTime=deadline)
 
     context = ssl.create_default_context()
     with smtplib.SMTP(smtp_server, port) as server:
