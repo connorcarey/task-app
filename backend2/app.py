@@ -2,29 +2,47 @@ from flask import Flask, render_template, request, redirect, session
 from firebase import firebase
 import firebase_admin
 from firebase_admin import firestore, credentials, db
+from flask_session import Session
+from tempfile import mkdtemp
+
 
 import smtplib, ssl
 from datetime import datetime
+app = Flask(__name__)
+
+app.config["SESSION_FILE_DIR"] = mkdtemp()
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 # Use a service account.
-app = Flask(__name__)
+
 cred = credentials.ApplicationDefault()
 firebase_admin.initialize_app(cred)
 
+
+
 @app.route('/api')
 def index():
-    return getTasks("", "Ud8a2ZqK6Ucn9BDm2xuj")
+    session['userID'] = "SFTmzYOuA8C1CAPH5ZST"
+    if session['userID']:
+        return getTasks("", session['userID'])
+# if __name__ == '__main__':
     
-@app.route('/api/dashboard', method=["GET"])
-def dashboard():
-    return getTasks("", session['userID'])
+#     app.run(host='10.31.176.1', port=5000, debug=True, threaded=False)
+
 
 # add task, accept invite, send proof (return media), confirm
 
-@app.route('/api/othersTasks', method=['GET', 'POST'])
+@app.route('/api/othersTasks', methods=['GET', 'POST'])
 def othersTasks():
     if request.method == 'GET':
-        return 
+        db = firestore.client()
+        allUsers = db.collection("users").document(session['userID'])
+        allTasks = allUsers.collection("othersTasks").stream()
+        #tasks_docs = allTasks.get()
+        tasks = [doc.to_dict() for doc in allTasks]
+        return tasks
     if request.method == 'POST':
         request_data = request.get_json()
         if request_data:
@@ -32,7 +50,7 @@ def othersTasks():
 
 
 
-@app.route('/api/login', method=["GET", "POST"])
+@app.route('/api/login', methods=["POST"])
 def login():
     if request.method == "POST":
         request_data = request.get_json()
@@ -41,7 +59,7 @@ def login():
                 session['userID'] = request_data['userID']
     
 
-@app.route('/api/makeTask', method=['POST'])
+@app.route('/api/makeTask', methods=['POST'])
 def makeTask():
     taskName = request.form.get('taskName')
     taskDescription = request.form.get('taskDescription')
@@ -92,11 +110,11 @@ def getTasks(taskID, userID):
     allUsers = db.collection("users").document(userID)
 
     if taskID == "":
-        allTasks = allUsers.collection("tasks").stream()
+        allTasks = allUsers.collection("yourTasks").stream()
         #tasks_docs = allTasks.get()
         tasks = [doc.to_dict() for doc in allTasks]
     else:
-        tasks = allUsers.collection("tasks").document(taskID).get().to_dict()
+        tasks = allUsers.collection("yourTasks").document(taskID).get().to_dict()
     return tasks
 
 
