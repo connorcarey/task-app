@@ -1,21 +1,21 @@
 from flask import Flask
-import firebase_admin
-from firebase_admin import credentials
-from firebase import firebase
-from firebase_admin import db
 from flask import Flask, render_template
+from firebase import firebase
+import firebase_admin
+from firebase_admin import firestore, credentials, db
 
 
-#cred = credentials.Certificate("C:\Users\yhmrt\OneDrive\Documents\GitHub\task-app\backend2\task-app-b58f4-firebase-adminsdk-2pkh6-ff0bf43edd.json")
-#firebase_admin.initialize_app(cred)
-#ref = db.reference("/")
-firebase = firebase.FirebaseApplication('https://task-app.nam5.firebasedatabase.app', None)
 
-
+# Use a service account.
 app = Flask(__name__)
-
+cred = credentials.ApplicationDefault()
+firebase_admin.initialize_app(cred)
 
 @app.route('/')
-def hello():
-    result = firebase.get('/tasks', None)
-    return str(result)
+def hello():    
+    
+    db = firestore.client()
+    users_ref = db.collection("users")
+    docs = users_ref.get()
+    
+    return [doc.to_dict() for doc in docs]
