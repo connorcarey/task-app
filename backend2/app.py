@@ -11,26 +11,28 @@ app = Flask(__name__)
 cred = credentials.ApplicationDefault()
 firebase_admin.initialize_app(cred)
 
-@app.route('/')
+@app.route('/api')
 def index():
-    #Getting a database and collection of all users
-    # db = firestore.client()
-    # users_ref = db.collection("users").document("Ud8a2ZqK6Ucn9BDm2xuj")
-
-    # tasks_ref = users_ref.collection("tasks")
-    # tasks_docs = tasks_ref.get()
-
-    # tasks = [doc.to_dict() for doc in tasks_docs]
-    # tasks = tasks[0]["deadlineTime"]
-    # return tasks
     return getTasks("", "Ud8a2ZqK6Ucn9BDm2xuj")
     
-@app.route('dashboard')
+@app.route('/api/dashboard', method=["GET", "POST"])
+def dashboard():
+    if request.method == "GET":
+        #do stuff
+        return 
+    elif request.method == "POST":
+        #do stuff
 
+# add task, accept invite, send proof (return media), confirm
 
-@app.route('/verify')
+@app.route('/api/verify')
 def verify():
     return "bo"
+
+@app.route('/api/login', method=["GET", "POST"])
+def login():
+    
+
 
 
 
