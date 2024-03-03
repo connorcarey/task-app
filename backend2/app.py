@@ -21,10 +21,16 @@ def dashboard():
 
 # add task, accept invite, send proof (return media), confirm
 
-@app.route('/api/verify')
-def verify():
+@app.route('/api/othersTasks', method=['GET', 'POST'])
+def othersTasks():
+    if request.method == 'GET':
+        return 
+    if request.method == 'POST':
+        request_data = request.get_json()
+        if request_data:
+            request_data = request_data.to_dict()
 
-    return "bo"
+
 
 @app.route('/api/login', method=["GET", "POST"])
 def login():
