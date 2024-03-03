@@ -14,15 +14,17 @@ firebase_admin.initialize_app(cred)
 
 @app.route('/')
 def index():
-    db = firestore.client()
-    users_ref = db.collection("users").document("Ud8a2ZqK6Ucn9BDm2xuj")
+    #Getting a database and collection of all users
+    # db = firestore.client()
+    # users_ref = db.collection("users").document("Ud8a2ZqK6Ucn9BDm2xuj")
 
-    tasks_ref = users_ref.collection("tasks")
-    tasks_docs = tasks_ref.get()
+    # tasks_ref = users_ref.collection("tasks")
+    # tasks_docs = tasks_ref.get()
 
-    tasks = [doc.to_dict() for doc in tasks_docs]
-    tasks = tasks[0]["deadlineTime"]
-    return tasks
+    # tasks = [doc.to_dict() for doc in tasks_docs]
+    # tasks = tasks[0]["deadlineTime"]
+    # return tasks
+    return getTaskDetails("Ud8a2ZqK6Ucn9BDm2xuj", "yP2sOyfpsXJvcu9lG4zj")
     
 
 @app.route('/verify')
@@ -66,3 +68,23 @@ def remindEmail(taskID, userID, emailAccount):
         server.login(computadora, password)
         server.sendmail(computadora, reciever, message)
 
+
+def getTaskDetails(taskID, userID):
+    db = firestore.client()
+    allUsers = db.collection("users").document(userID)
+
+    allTasks = allUsers.collection("tasks").document(taskID)
+    tasks = [doc.to_dict() for doc in allTasks]
+
+    return tasks
+
+
+def getAnnoyanceLevel(taskID, userID):
+    db = firestore.client()
+    users_ref = db.collection("users").document(userID)
+
+    tasks_ref = users_ref.collection("tasks").document(taskID)
+    tasks_docs = tasks_ref.get()
+
+    tasks = [doc.to_dict() for doc in tasks_docs]
+    return tasks[0]["annoyanceLevel"]
