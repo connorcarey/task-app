@@ -63,9 +63,22 @@ def makeTask():
         "verified" : False,        
     }
 
+    db = firestore.client()
+    
+    userIdentification = session['userID'] 
+    taskRef = db.collection('users').document(userIdentification).collection('yourTasks')
+    documentRef = taskRef.add(personalTask)
+    taskID = documentRef.id
+
     otherTask = {
-        ""
+        "acceptedInvite" : False,
+        "readyToConfirm" : False,
+        "taskID_ofSender" : taskID
     }
+
+    ref = db.collection('users').document(recieverID).collection('othersTasks')
+    ref.add(otherTask)
+    
     
 
 
@@ -96,8 +109,6 @@ def remindEmail(taskID, userID, emailAccount):
     with smtplib.SMTP(server, portNum) as server:
         server.sendmail(msg['From'], msg['To'], msg.as_string())
   
-    
-
 def getTasks(taskID, userID):
     db = firestore.client()
     allUsers = db.collection("users").document(userID)
