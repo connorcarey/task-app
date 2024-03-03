@@ -15,25 +15,32 @@ firebase_admin.initialize_app(cred)
 def index():
     return getTasks("", "Ud8a2ZqK6Ucn9BDm2xuj")
     
-@app.route('/api/dashboard', method=["GET", "POST"])
+@app.route('/api/dashboard', method=["GET"])
 def dashboard():
-    if request.method == "GET":
-        #do stuff
-        return 
-    elif request.method == "POST":
-        #do stuff
+    return getTasks("", session['userID'])
 
 # add task, accept invite, send proof (return media), confirm
 
 @app.route('/api/verify')
 def verify():
+
     return "bo"
 
 @app.route('/api/login', method=["GET", "POST"])
 def login():
+    if request.method == "POST":
+        request_data = request.get_json()
+        if request_data:
+            if 'userID' in request_data:
+                session['userID'] = request_data['userID']
     
 
-
+@app.route('/api/makeTask', method=['POST'])
+def makeTask():
+    request_data = request.get_json()
+    if request_data:
+        if 'taskName' in request_data:
+            taskName = request_data['taskName']
 
 
 
