@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Customize scrollbar */
+/* Both horizontal and vertical scrollbar */
+::-webkit-scrollbar {
+    width: 6px; /* Set the width of the scrollbar */
+    height: 6px;
+    padding-left: 1px;
+  }
+  
+  /* Thumb */
+  ::-webkit-scrollbar-thumb {
+    background-color: #7e7e7e; /* Set the color of the thumb */
+    border-radius: 6px; /* Set border-radius for fully rounded corners */
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: none; /* Remove the track */
+  }
+  

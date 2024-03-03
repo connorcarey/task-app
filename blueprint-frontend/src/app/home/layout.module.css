@@ -1,0 +1,4 @@
+#parrentDiv{
+    display: grid;
+    grid-template-columns: 200px calc(100vw  - 200px - 40px - 20px);
+}
