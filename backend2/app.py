@@ -25,6 +25,8 @@ def index():
     # return tasks
     return getTasks("", "Ud8a2ZqK6Ucn9BDm2xuj")
     
+@app.route('dashboard')
+
 
 @app.route('/verify')
 def verify():
