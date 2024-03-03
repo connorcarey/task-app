@@ -12,8 +12,7 @@ cred = credentials.ApplicationDefault()
 firebase_admin.initialize_app(cred)
 
 @app.route('/')
-def hello():    
-    
+def index():
     db = firestore.client()
     users_ref = db.collection("users").document("Ud8a2ZqK6Ucn9BDm2xuj")
 
@@ -21,4 +20,10 @@ def hello():
     tasks_docs = tasks_ref.get()
 
     tasks = [doc.to_dict() for doc in tasks_docs]
+    tasks = tasks[0]["deadlineTime"]
     return tasks
+    
+
+@app.route('/verify')
+def verify():
+    return "bo"
