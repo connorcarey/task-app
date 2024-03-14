@@ -37,11 +37,11 @@ def index():
 
 # other people's tasks will be sent back to the front end. The if the front end posts, we recieve the data and update firebase.
 @app.route('/api/othersTasks', methods=['GET', 'POST'])
-def othersTasks(userID):
+def othersTasks():
     # if we get a get method
     if request.method == 'GET':
-        session['userID'] = userID
-
+        
+        session['userID'] = "SFTmzYOuA8C1CAPH5ZST"
         # call on the database and get others' tasks inside of this current user
         db = firestore.client()
         allUsers = db.collection("users").document(session['userID'])
